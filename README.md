@@ -16,12 +16,14 @@ Install loader software and use the Serial port set to 115200. Prompts are:
   - Latitude
 Once memory is set up, then install the badge software.
 
-Badge software can be loaded and upgraded sepraretly from the name load.  There is no need to use the name loader again once values are set properly. 
+Badge software can be loaded and upgraded separately from the name load.  There is no need to use the name loader again once values are set properly. 
 
 Badge software does the following:
-Connects to WiFi.  Gets the time.   If fails, then the icon will not show connected in on the display. Time is updated every minute from internal clock.
+Connects to WiFi. It tries the first SSID 25 times and the second one 50 times.  
+Gets the time.   If fails, then the icon will not show connected in on the display. Time is updated every minute from internal clock.
 Time is pulled from NTP pool every hour
 Display is updated to reflect the name and employee number and status of the device. 
 Switch management and sleep timer is set up (loops infinately).
 See separate documentation for the switch management and sleep/time/display functions. 
 Longitude and Latitude are not yet used. Eventually will be used for weather forecast display. 
+
