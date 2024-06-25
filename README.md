@@ -3,6 +3,7 @@
 Tandem 50th Anniversary badge project 
 
 Name Loader tool is used to place persitent values into the memory of the ESP-32. 
+
 Install loader software and use the Serial port set to 115200. Prompts are: 
   - First name
   - Last name
@@ -14,6 +15,7 @@ Install loader software and use the Serial port set to 115200. Prompts are:
   - Time zone offset from GMT (e.g. -5 for Eastern U.S.)
   - Longitude
   - Latitude
+
 Once memory is set up, then install the badge software.
 
 Badge software can be loaded and upgraded separately from the name load.  There is no need to use the name loader again once values are set properly. 
