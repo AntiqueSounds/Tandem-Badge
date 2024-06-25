@@ -27,9 +27,6 @@ Switch management and sleep timer is set up (loops infinately).
 See separate documentation for the switch management and sleep/time/display functions. 
 Longitude and Latitude are not yet used. Eventually will be used for weather forecast display. 
 
-
-Guys. The switches and software actually is partially design. Lol 
-
 General info:
 Power is from the battery that sits under the top board. 
 To recharge, you have to pull the display/cpu from the board (it is just plugged in). This is a design flaw that will be resolved in the first real version.  Carefully pull it from the top but do not pull the battery plug out. Let it sit there.  Then plug into the power source (PC or generic wall charger)  The estimate voltage is shown at the bottom of the screen. The number shown is only an estimate and the voltage sample is only taken via some trickery when the system starts up. At full charge it should be 3-3.3 volts.  It works fine down in the 1.8 volt range. 
