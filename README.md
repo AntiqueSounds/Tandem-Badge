@@ -14,7 +14,7 @@ Serial port set to 115200. Prompts are:
   - Employee number - Any text used for Employee number in the display.
   - Time zone offset from GMT (e.g. -5 for Eastern U.S. - default)
   - Country code (default = US - Not used in this release) 
-  - Zip Code (not used in thei software release)
+  - Zip Code (not used in this software release)
 
 Once memory is set up, then install the badge software.
 
@@ -31,7 +31,7 @@ Zip code and country code are not used. Eventually will be used for weather fore
 
 General info:
 Power is from the battery that sits under the top board. 
-To recharge, you have to pull the display/cpu from the board (it is just plugged in). This is a design flaw that will be resolved in the first real version.  Carefully pull it from the top but do not pull the battery plug out. Let it sit there.  Then plug into the power source (PC or generic wall charger)  The estimate voltage is shown at the bottom of the screen. The number shown is only an estimate and the voltage sample is only taken via some trickery when the system starts up. At full charge it should be 4-3.3 volts.  It works fine down in the 1.8 volt range. 
+To recharge, you have to pull the display/cpu from the board (it is just plugged in). This is a design flaw that will be resolved in the first real version.  Carefully pull it from the top but do not pull the battery plug out. Let it sit there.  Then plug into the power source (PC or generic wall charger)  The estimate voltage is shown at the bottom of the screen. The number shown is only an estimate and the voltage sample is only taken via some trickery when the system starts up. At full charge it should be 4-3.7 volts.  It works fine down in the 3 volt range. 
 
 Software:
 
