@@ -1,4 +1,7 @@
-
+/*
+Tandem name badge simulation software 
+M. Keith Moore
+*/
 /*
 This is the linty version 4 (3d) of the Tandem Badge software. Next version will be delinted and will add a few more features.
 Version 4- Adds Serial input of the stored configuration values. 
@@ -29,14 +32,6 @@ The loop is:
 
 
 #include <WiFi.h>
-//#include <WiFiAP.h>
-//#include <WiFiClient.h>
-//#include <WiFiGeneric.h>
-//#include <WiFiMulti.h>
-//#include <WiFiSTA.h>
-//#include <WiFiScan.h>
-//#include <WiFiServer.h>
-//#include <WiFiType.h>
 #include <WiFiUdp.h>
 #include <TimeLib.h>
 #include <NTPClient.h>
@@ -45,16 +40,10 @@ The loop is:
 #include <jled.h>
 #include <ESPHTTPClient.h>
 #include <time.h>
-//#include "SunMoonCalc.h"
 
-
-/*
-Tandem name badge simulation software 
-M. Keith Moore
-*/
 //#define DEBUG TRUE // Comment this out for non-debug
 #define ENABLE_GxEPD2_GFX 0
-#define DISVERSION "V3d"
+#define DISVERSION "V3d1"
 #define XSTATUS 235  // beginning of the status @ this column
 #define YSTATUS 128  // beginning of the status at this row
 #define BOXWIDTH 200
@@ -84,17 +73,9 @@ M. Keith Moore
 #include <boards.h>
 #include <GxEPD.h>
 #include <GxEPD2_BW.h>
-//#include <GxEPD2_3C.h>
-//#include <GxEPD2_4C.h>
-//#include <GxEPD2_7C.h>
-//#include <GxDEPG0213BN/GxDEPG0213BN.h>    // 2.13" b/w  form DKE GROUP
 #define GxEPD2_DRIVER_CLASS GxEPD2_213_BN // DEPG0213BN  122x250, SSD1680, (FPC-7528B), TTGO T5 V2.4.1, V2.3.1
-//#define GxEPD2_DRIVER_CLASS GxEPD2_213_GDEY0213B74 // GDEY0213B74 122x250, SSD1680, (FPC-A002 20.04.08)
 //#include <SD.h>
 #include <FS.h>
-//#include <WiFi.h>
-
-//#include GxEPD_BitmapExamples
 // FreeFonts from Adafruit_GFX
 // Fonts are located in the libraries/fonts directory under the Adafruit_GFX_Library folder in the fontss folder. 
 
@@ -205,7 +186,7 @@ Timers refreshTimer;
 //const char* ntpServer = "pool.ntp.org";
 unsigned long lastUpdate = 0;
 unsigned long lastIntervalUpdate = 0;
-const long updateInterval = 18000000; // how often to update time seconds 30 mins
+const long updateInterval = 3600000; // how often to update time seconds 60 mins
 unsigned long lastNTPTime = 0;
 const char* ntpServer = "time.nist.gov";
 int  gmtOffset_hours = -4;
@@ -478,7 +459,7 @@ void drawBattery() {
 //  percentage = random(5,90);  /// for testing pick a random value
   Serial.printf("draw battery percent= %5.2f, volts= %5.3f\n",percentage,volts);
 #endif
-  display.fillRect(battx+2, batty,battw*(percentage/100), batth-1,GxEPD_BLACK);
+  display.fillRect(battx+2, batty,battw*(percentage/100)-1, batth-1,GxEPD_BLACK); //fils in the battery bar
 }
 void getVoltage(){
 
@@ -502,14 +483,12 @@ Serial.print(" - ");
   delayMicroseconds(10);
   }
 }  
-  volts = (raw / 4096) * 3.3;  // Full run voltage is 3.3 
-//  percentage = map(raw, 0.0f, 4095.0f, 0, 100); // percentage is percent of fullcapacity, not percent of voltage calulated
-  percentage = (volts / 3.3) *100; 
+  volts = (raw / 4096) * 4.1;  // Full run when charging voltage is 4.1 
 
+    percentage = map(volts,3.1f,4.1f,0,100); // the unit runs down to about 3.1V
 #ifdef DEBUG
-  Serial.printf("For pin %u Raw value is %5.3f, voltage is %5.3f and Battery Level is: %u \n",vPin,raw,volts,percentage);
 // percentage = 47;   // for testing make it less than 100%
-//   Serial.printf("reading is %d and voltage is %5.3f / %u percent. \n",vValue, volts,percentage);
+  Serial.printf("For pin %u Raw value is %5.3f, voltage is %5.3f and Battery Level is: %u \n",vPin,raw,volts,percentage);
 #endif
 //  delay(500);
 }
