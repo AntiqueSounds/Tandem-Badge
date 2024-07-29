@@ -43,7 +43,7 @@ The loop is:
 
 //#define DEBUG TRUE // Comment this out for non-debug
 #define ENABLE_GxEPD2_GFX 0
-#define DISVERSION "V3d1"
+#define DISVERSION "V3d2"
 #define XSTATUS 235  // beginning of the status @ this column
 #define YSTATUS 128  // beginning of the status at this row
 #define BOXWIDTH 200
@@ -175,9 +175,10 @@ auto throbberled = JLed(throbberPin).Breathe(1800).DelayAfter(150).MaxBrightness
 //auto powerled = JLed(powerPin).Breathe(3000).MaxBrightness(30).MinBrightness(5).DelayAfter(500).Forever();
 auto resetled = JLed(resetPin).Breathe(5000).MaxBrightness(10).Forever();
 auto powerled = JLed(powerPin).Breathe(7000).MaxBrightness(10).Forever();
-auto SAO1led = JLed(SAO1Pin).Candle(4 /* speed */, 100 /*jitter*/).Forever();
-auto SAO2led = JLed(SAO2Pin).Candle(6 /* speed */, 200 /*jitter*/).Forever();
-
+auto SAO2led = JLed(SAO2Pin).Candle(4 /* speed */, 100 /*jitter*/).Forever();
+//auto SAO2led = JLed(SAO2Pin).Candle(6 /* speed */, 200 /*jitter*/).Forever();
+//auto SAO2led = JLed(SAO2Pin).Blink(1000,500).Forever();
+auto SAO1led = JLed(SAO1Pin).Blink(1000,500).Forever();
 // Setup timer(s)
 
 Timers refreshTimer;
@@ -448,10 +449,16 @@ void drawBattery() {
   batth = 6;
 
   display.fillRect(battx-10,batty-10,battw+22,batth+15,GxEPD_WHITE); // Wipe out prior display. 
-  display.setCursor (battx-5,batty-5);
+  display.setCursor (battx,batty-5);
   display.setFont(&TomThumb);
+  
   int perc = round(percentage); 
-  display.println( String(volts) + "V " + perc + "%");
+  if (volts >= 4.09){
+  display.setCursor (battx,batty+2);  
+  display.println( String(volts) + " V");
+  }
+  else {
+  display.println(String(volts)+"v");
   display.drawRect(battx, batty-2, battw+3, batth+3,GxEPD_BLACK);
   display.fillRect(battx+2, batty, battw-1, batth-1,GxEPD_WHITE);
   display.fillRect(battx+battw+2,batty,3,5,GxEPD_BLACK); // the nub of the battery
@@ -460,7 +467,9 @@ void drawBattery() {
   Serial.printf("draw battery percent= %5.2f, volts= %5.3f\n",percentage,volts);
 #endif
   display.fillRect(battx+2, batty,battw*(percentage/100)-1, batth-1,GxEPD_BLACK); //fils in the battery bar
+  }; // END of else 
 }
+
 void getVoltage(){
 
 float rawloop, raw = 0;
@@ -484,8 +493,7 @@ Serial.print(" - ");
   }
 }  
   volts = (raw / 4096) * 4.1;  // Full run when charging voltage is 4.1 
-
-    percentage = map(volts,3.1f,4.1f,0,100); // the unit runs down to about 3.1V
+    percentage = map(volts,3.28f,3.7f,0,100); // the unit runs down to about 3.1V
 #ifdef DEBUG
 // percentage = 47;   // for testing make it less than 100%
   Serial.printf("For pin %u Raw value is %5.3f, voltage is %5.3f and Battery Level is: %u \n",vPin,raw,volts,percentage);
@@ -1218,8 +1226,11 @@ Serial.println("register display");
 #endif 
         showPartialUpdate(partialScreenBuffer);
     };
-    updatePWM();
-    if (switchCheck(result)){
+#ifdef DEBUG
+Serial.prinln("pwm.");
+#endif
+  updatePWM();
+  if (switchCheck(result)){
       processSwitches();
 #ifdef DEBUG
     Serial.println("New switch value!");
