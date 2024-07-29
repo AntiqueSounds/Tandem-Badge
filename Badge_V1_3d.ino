@@ -167,7 +167,8 @@ display(GxEPD2_290_GDEY029T94(/*CS=5*/ EPD_CS, /*DC=*/ EPD_DC, /*RST=*/ EPD_RSET
 
 // Setup software PWM for leds. 
 
-auto throbberled = JLed(throbberPin).Breathe(1800).DelayAfter(150).MaxBrightness(20).Forever();
+auto throbberled = JLed(throbberPin).Breathe(1800).DelayAfter(150).Forever();
+//auto throbberled = JLed(throbberPin).Breathe(1800).DelayAfter(150).MaxBrightness(20).Forever();
 //auto throbberled = JLed(throbberPin).Candle(5 /* speed */, 150 /*jitter*/).Forever();
 //auto resetled = JLed(resetPin).Breathe(3000).MinBrightness(10).DelayAfter(500).Repeat(50);
 //auto powerled = JLed(powerPin).Breathe(2500).MinBrightness(10).DelayAfter(500).Repeat(50);
