@@ -41,13 +41,21 @@ Last Name
 Employee number
 Wifi SSID
 WiFI Password
+SSID2 - Secondary WiFI SSID
+WiFiPassword2 - Secondary WiFI Password
+Time zone offset from GMT (e.g. -5 for Eastern U.S. - default)
+*Country code (default = US - Not used in this release) 
+*Zip Code (not used in this software release)
+*Weather key 
 
-This memory is loaded by setting all of the switched on and connecting to the serial port via USB.  The values stay no matter which version of the badge software later load. 
+* Not yet used in the software. 
+
+This memory is loaded by setting all of the switches on "1111111111111111" and connecting to the serial port via USB.  The values stay no matter which version of the badge software later load. 
 Version 3d (Version 3e is in the works)
 
 Power switch is at the bottom (reset button).   On to the left, off to the right. 
 At boot (turn on) the names and information are loaded from memory (above). 
-The display is refresh to a baseline Name tag. 
+The display is refresh to a baseline name tag. 
 After display is refreshed the LEDs are reset and the switches are processed. 
 
 Switch usage: 
@@ -68,4 +76,4 @@ Software does a candle display on the SAO0 and SAO1 ports GPIO25 and GPIO26 resp
 The software pulsates the “throbbing” chevron in the lower right.   The power and run LEDs are also pulsed in the software (not related to the switches).
 
 At boot the device attempts to connect to the first SSID, if it fails it tries the second.  If it connects, then it gets the time and offsets using the TZ parameter.
-Time is displayed at the bottom. The wifi is disconnected.  Time is maintained inside the device and is updated every minute. THe Wifi is connected every 30 minutes to refresh and sync for clock float. 
+Time is displayed at the bottom. The wifi is disconnected.  Time is maintained inside the device and is updated every minute. THe Wifi is connected every hour to refresh and sync for clock float. 
