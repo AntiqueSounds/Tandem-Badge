@@ -2,7 +2,8 @@
 # Tandem-Badge
 Tandem 50th Anniversary badge project
 
-Current version is V3d2 (shown on the badge in the lower right corner). 
+Current version is V3e (shown on the badge in the lower right corner). 
+
 
 The software has been enhanced to allow serial connection via USB port (115200) to prompt for values to place into persitent memory of the ESP-32. The use of the name loader tool is now unnecessary.
 
@@ -17,11 +18,12 @@ Serial port set to 115200. Prompts are:
   - Time zone offset from GMT (e.g. -5 for Eastern U.S. - default)
   - Country code (default = US - Not used in this release) 
   - Zip Code (not used in this software release)
+  - Sleep timeout in minutes.  How long until the device goes to sleep (range 1 to high-values)
 
 Badge software can be loaded and upgraded separately from the name load.  There is no need to use the name loader again once values are set properly. 
 
 Badge software does the following:
-Connects to WiFi. It tries the first SSID 25 times and the second one 50 times.  
+Connects to WiFi. It tries the first SSID several times and the second one several times.  
 Gets the time.   If fails, then the icon will not show connected in on the display. Time is updated every minute from internal clock.
 Time is pulled from NTP pool every hour
 Display is updated to reflect the name and employee number and status of the device. 
@@ -47,11 +49,11 @@ Time zone offset from GMT (e.g. -5 for Eastern U.S. - default)
 *Country code (default = US - Not used in this release) 
 *Zip Code (not used in this software release)
 *Weather key 
+Sleep timout value (1-9999 minutes) 
 
 * Not yet used in the software. 
 
 The configuration memory is loaded by setting all of the switches on "1111111111111111" and connecting to the serial port via USB.  The values stay on the device no matter which version of the badge software is loaded in the future. 
-
 
 Power switch is at the bottom (reset button).   On to the left, off to the right. 
 At boot (turn on) the names and information are loaded from memory (above). 
