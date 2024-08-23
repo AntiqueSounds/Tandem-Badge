@@ -7,9 +7,9 @@ See:
 [DefCon badges](https://defcon.org/html/links/dc-badge.html)  
 [SAO board specs](https://hackaday.io/project/175182-simple-add-ons-sao)
 
+*Note: I am working on instructions for building the device.This will be done in a while. I have to take photographs of each step and then document each step. This will take me a bit of time. Please be patient.*
 
-
-Current software version is V3e (shown on the badge in the lower right corner sideways).   The current badge versio is 12x for both top and bottom. The two boards must match versions.  
+Current software version is V3E (shown on the badge in the lower right corner sideways).   The current badge versio is 12x for both top and bottom. The two boards must match versions.  
 The SAO boards have separate versioning and do not have to coincide (can be used on any other SAO enabled badge). 
 ## Functionality
 The software has been enhanced to allow serial connection via USB port (115200) to prompt for values to place into persitent memory of the ESP-32. The use of the name loader tool is not unnecessary anymore.
@@ -72,6 +72,14 @@ The software pulsates the “throbbing” chevron in the lower right.   The powe
 
 At boot the device attempts to connect to the first SSID, if it fails it tries the second.  If it connects, then it gets the time and offsets using the TZ parameter.  If the WIFi fails to connect, it shows N/A where time would normally reside. It will retry every hour.  
 Time is displayed at the bottom. The wifi is then disconnected.  Time is maintained inside the device and is updated every minute. The Wifi is connected every hour to refresh and sync for clock float. 
+### Display layout:
+The display places the First name as the largest text. Text size adjusts as the length requires. Up to 5 characters show at the largest size.  Last name is placed below and is resized according to how long it is. The maximum viable last name length is about 14 characters (if I rememeber correctly?).  
+Lowest line shows an estimate of battery power. Do not rely entirely on this image or voltage shown. If it drops below 3.9, you should recharge the device.  
+The employee number value is display to the right of the battery.   
+The time is shown if available. If not, it should show "N/A".  The device requires access to WiFi in order to obtain the time.  
+To the right of the time is icon(s) that show state.  If in flux getting the time, it will change a few times.  Once the device is settled and resting, the icon should be a little handheld device image.  When sleeping, it shoulds show a little crecent moon. 
+To the right of the icons is tiny static informational text:  Version id, a number showing the current sleep time setting, and the name of the prefered SSID to connect to.  
+The screen refreshes every minute (time display updates each minute). 
 
 ### Sleep logic: 
 A timer is set that is a reflection of the timeout request in the Sleep time parameter value. This parameter is represented in minutes. 
@@ -79,9 +87,9 @@ For example, if the timer is set for 15 minutes, then after 15 minutes with no s
 "Sleeping" is not sleeping the processor. The processor still needs to watch the switches. However, for practical purposes little power is used.  
 While sleeping no LEDS show and no Wifi is used. Most of the power is being reserved.
 
-Time logic:
+### Time logic:
 Time is gathered via WiFI from an NTP server. Offset is presented and the HH:MM should reflect current time for the locale represented by the offset value. (-5 USEST, -6 USCST, -7 USMST, -8 USPST, etc.) 
-Each minute the screen is refreshed with a new time. The refresh will be less obnoxious in a future release. Currently, the fulle screen is refreshed which causes it to blink.  
+Each minute the screen is refreshed with a new time. The refresh will be less obnoxious in a future release. Currently, the full screen is refreshed which causes it to blink.  
 There is also a delay when startup happens (before the switches and LEDs are started). I do lots of nasty slow stuff at startup. 
 After 30 minutes, the time is refreshed from the time server (via WiFI) So the net is that WiFi is only used every 30 minutes. 
 
