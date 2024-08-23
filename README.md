@@ -29,7 +29,7 @@ Zip code and country code are not yet used. Eventually will be used for weather 
 
 ### General info:
 Power is from the battery that sits under the top board. 
-To recharge, you plug the USB into the power source (PC or generic wall charger).  The estimated voltage is shown at the bottom of the screen but is unreliable because the drop form 4.1 to <3.1 (lowest that wil run the processor) is so quick that it is hard to catch from the power pins. BUt an estimate is attempted. and it looks cool. The number shown is only an estimate and the voltage sample is only taken via some trickery when the system starts up. At full charge it should be 4.1-4.07 volts.  It works fine down in the 3.1 volt range. 
+To recharge, you plug the USB into the power source (PC or generic wall charger).  The estimated voltage is shown at the bottom of the screen but is unreliable because the drop form 4.1 to <3.1 (lowest that wil run the processor) is so quick that it is hard to catch from the power pins. But an estimate is attempted and it looks cool. The number shown is only an estimate and the voltage sample is only taken via some trickery when the system starts up. At full charge it should be 4.1-4.07 volts.  It works fine down in the 3.1 volt range. 
 
 ### Software:
 
@@ -53,7 +53,7 @@ The configuration memory is loaded by setting all of the switches on "1111111111
 
 Power switch is at the bottom (reset button).   On to the left, off to the right. 
 At boot (turn on) the names and information are loaded from memory (above). 
-The display is refresh to a baseline name tag. 
+The display is refreshed to a baseline name tag. 
 After display is refreshed the LEDs are reset and the switches are processed. 
 
 ### Switch usage: 
