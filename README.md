@@ -1,6 +1,6 @@
 
 # Tandem-Badge
-## Tandem 50th Anniversary badge project :happy:
+## Tandem 50th Anniversary badge project ✨
 
 This project is a special anniversary badge that can be used for trade shows like the ones used at DefCon.  The standard for SAO badge boards is fully supported in the hardware and software
 See:   
