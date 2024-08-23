@@ -5,7 +5,7 @@ M. Keith Moore
 /*****************************************************************************************
 * This is the linty version 5 (3e) of the Tandem Badge software. 
 * Next version will be delinted and will add a few more features.
-* Version 5- Adds Serial input of the stored configuration values. 
+* Serial input of the stored configuration values. 
 * Stored values are: 
 * First Name
 * Last Name
@@ -14,8 +14,13 @@ M. Keith Moore
 * WiFi Password primary
 * SSID backup name
 * WiFI backup name
-* Timezone offset value (hours offset from GMT)
-* Zip code for mapping weather location
+* Timezone offset value (hours offset from GMT)  -5 is US eastern
+* Zip code for mapping weather location   Not used
+* Country code (defaults to US) for future use for weather   Not used 
+* Open Weather Key - for future weather update usage  Not used
+* Sleep timer - How many minutes with no activity before sleeping. (1-999) Any key toggle re-activates.  
+*
+*
 *
 * Functionally, the setup clears the screen and estsblished the pinouts for the shifters and switches.  It draws the baseline display without the time  
 * 
@@ -25,8 +30,10 @@ M. Keith Moore
 *      - Check switches
 *      - Map switches to actions
 *      - Switches are reflected above their locaiotn in the LED or..
-*      - Switches do special actions.  Documented elsewhere. 
-* Sleep logic is limited in this version. 
+*      - Switches do special actions.  Documented elsewhere.
+*      - Check timers - Sleep (below) and minute update times. Every 30 minutes (default) the NTP time will be resynced with the internal clock.  
+*      - Sleep time is checked and reset each time a switch is changed. Wake is done by flipping any switch. 
+*        Sleep only stops the LEDs.  THe WiFi is not active except every time the time is synced to NTP every 30 minutes
 *  
 *  
 *************************************************************************/
@@ -68,7 +75,7 @@ M. Keith Moore
 #define uS_TO_S_FACTOR 1000000 // Conversion factor for micro seconds to seconds 
 
 //#ifdef DEBUG
-#define TIME_TO_SLEEP 5 // How long ESP32  sleep (in seconds) 5 seconds for testing.
+#define TIME_TO_SLEEP 5 // How long ESP32  sleep (in seconds) 5 seconds for testing. - No longer used
 //#else
 //#define TIME_TO_SLEEP 1800 // How ESP32 will sleep for (in seconds) 30 minutes
 //#endif
@@ -87,7 +94,7 @@ M. Keith Moore
 #define SLEEPSWITCHEDON 0B1000000000000001 // high+low value makes me sleepy.
 #define     GETNEWPREFS 0B1111111111111111 // high values sets load preferences on serial port  
 #define NOWIFINOW "O"  // was o or a
-#define YESWIFINOW "l"
+#define YESWIFINOW "l" // these are special characters for the special fonts (meteo and others) 
 #define FAILWIFI "n"
 #define SLEEPWIFI "2"
 
@@ -109,7 +116,7 @@ M. Keith Moore
 //#define GxEPD2_DRIVER_CLASS GxEPD2_213_GDEY0213B74 // GDEY0213B74 122x250, SSD1680, (FPC-A002 20.04.08)
 
 //#include <SD.h>
-#include <FS.h>
+//#include <FS.h>
 //#include <WiFi.h>
 
 //#include GxEPD_BitmapExamples
@@ -118,7 +125,8 @@ M. Keith Moore
 
 #include <Fonts.h>  // the files called Fonts contains the used list instead of keeping it here. 
 
-/* These should reside in the GFX library 
+/* These should reside in the GFX library shown here still to confirm the ones that are used and the ones not used. 
+* See the fonts.h file to see which ones are active and used
 
 #include <Fonts/data_latin6pt7b.h>
 #include <Fonts/data_latin8pt7b.h>
