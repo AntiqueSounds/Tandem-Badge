@@ -491,8 +491,9 @@ void setup(){
   sleepTimerVal = sleepTimeout * 60000 ;  // Timeout value is in minutes. Timer is in mseconds. 
   refreshTimer.start(REFRESHTIMERVAL);   // start a timer for display refresh
   sleepTimer.start(sleepTimerVal); // time until we for a sleep
-  
+  #ifdef DEBUG
   Serial.println("Sleep timer=" + String(sleepTimerVal));
+  #endif
   //weather.key(openWeatherKey); //Inserting API key that allows us to use openweathermap.org API
   //weather.getWeatherByCityName(city_name,country,units,language); //Getting weather data from openweathermap.org
   //Execution time around 100ms usually
