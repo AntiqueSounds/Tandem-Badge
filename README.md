@@ -7,6 +7,8 @@ See:
 [DefCon badges](https://defcon.org/html/links/dc-badge.html)  
 [SAO board specs](https://hackaday.io/project/175182-simple-add-ons-sao)
 
+
+
 Current software version is V3e (shown on the badge in the lower right corner sideways).   The current badge versio is 12x for both top and bottom. The two boards must match versions.  
 The SAO boards have separate versioning and do not have to coincide (can be used on any other SAO enabled badge). 
 ## Functionality
@@ -27,7 +29,7 @@ Zip code and country code are not yet used. Eventually will be used for weather 
 
 ### General info:
 Power is from the battery that sits under the top board. 
-To recharge, you have to pull the display/cpu from the board (it is just plugged in).    Plug into the power source (PC or generic wall charger).  The estimate voltage is shown at the bottom of the screen but is unreliable because the drop form 4.1 to <3.1 (lowest that wil run the processor) is so quick that it is hard to catch from the power pins. BUt an estimate is attempted. and it looks cool. The number shown is only an estimate and the voltage sample is only taken via some trickery when the system starts up. At full charge it should be 4.1-4.07 volts.  It works fine down in the 3.1 volt range. 
+To recharge, you plug the USB into the power source (PC or generic wall charger).  The estimated voltage is shown at the bottom of the screen but is unreliable because the drop form 4.1 to <3.1 (lowest that wil run the processor) is so quick that it is hard to catch from the power pins. BUt an estimate is attempted. and it looks cool. The number shown is only an estimate and the voltage sample is only taken via some trickery when the system starts up. At full charge it should be 4.1-4.07 volts.  It works fine down in the 3.1 volt range. 
 
 ### Software:
 
@@ -62,10 +64,9 @@ Normal switch on/off directs up to the led above it. On turns on the LED, off tu
 All switches on forces the device to prompt for memory values as listed above. Name, SSID, etc. 
 Switches are considered big-endian from the user perspective (low order is rightmost (#16))
 
-0000000000100010 = High-order switches +10 +14 – Octal 42, a random animated display.  There are 7 different possible random displays. 
-0100000000000000 = Set to little endian "2" = octal “4000"    does a “cylon”  display 
+0000000000100010 = High-order switches +10 +14 – Octal 42, a random animated display. There are 7 different possible random displays.  
+0100000000000000 = Set to little endian "2" = octal “4000"    does a “cylon”  display  
 1100000000000000 = Set to little endian “3” = octal "140000"  does a “boot startup display”
-
 
 The software pulsates the “throbbing” chevron in the lower right.   The power and run LEDs are also pulsed in the software (not related to the switches).
 
@@ -73,9 +74,9 @@ At boot the device attempts to connect to the first SSID, if it fails it tries t
 Time is displayed at the bottom. The wifi is then disconnected.  Time is maintained inside the device and is updated every minute. The Wifi is connected every hour to refresh and sync for clock float. 
 
 ### Sleep logic: 
-A timer is set that is a reflection of the timeout request in the Sleep timet parameter value. This paramter is in minutes. 
-So, for example, if the timer is set for 15 minutes, then after 15 minutes with no switch being changed, the device will "sleep".
-"Sleeping" is not sleeping the processor. The processor still needs to watch the switches. However, for practical purposes llittle power is used.  
+A timer is set that is a reflection of the timeout request in the Sleep time parameter value. This parameter is represented in minutes. 
+For example, if the timer is set for 15 minutes, then after 15 minutes with no switch being changed, the device will "sleep".
+"Sleeping" is not sleeping the processor. The processor still needs to watch the switches. However, for practical purposes little power is used.  
 While sleeping no LEDS show and no Wifi is used. Most of the power is being reserved.
 
 Time logic:
@@ -85,7 +86,7 @@ There is also a delay when startup happens (before the switches and LEDs are sta
 After 30 minutes, the time is refreshed from the time server (via WiFI) So the net is that WiFi is only used every 30 minutes. 
 
 ## SAO ports and SAO boards
-### SAO devices are suppored on the “dynabus” ports
+### SAO devices are supported on the “dynabus” ports
 Software does a candle display on the SAO0 and SAO1 ports GPIO25 and GPIO26 respectively.    The direct power on 5V/G is supported too.   SISO is not used. 
 
 SAO ports are labeled "Dynabus: They are standard SAO V 1.68 ports. https://hackaday.com/2019/03/20/introducing-the-shitty-add-on-v1-69bis-standard/
