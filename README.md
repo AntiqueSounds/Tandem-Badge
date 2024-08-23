@@ -2,8 +2,12 @@
 # Tandem-Badge
 Tandem 50th Anniversary badge project
 
-Current version is V3e (shown on the badge in the lower right corner). 
+This project is a special anniversary badge that can be used for trade shows like the ones used at DefCon.  The standard for SAO badge boards is fully supported in the hardware and software
+See: https://defcon.org/html/links/dc-badge.html
+https://hackaday.io/project/175182-simple-add-ons-sao
 
+Current software version is V3e (shown on the badge in the lower right corner sideways).   The current badge versio is 12x for both top and bottom. The two must match.  
+The SAO boards have separate versioning and do not have to coinside (can be used on any other SAO enabled badge). 
 
 The software has been enhanced to allow serial connection via USB port (115200) to prompt for values to place into persitent memory of the ESP-32. The use of the name loader tool is now unnecessary.
 
@@ -18,7 +22,7 @@ Serial port set to 115200. Prompts are:
   - Time zone offset from GMT (e.g. -5 for Eastern U.S. - default)
   - Country code (default = US - Not used in this release) 
   - Zip Code (not used in this software release)
-  - Sleep timeout in minutes.  How long until the device goes to sleep (range 1 to high-values)
+  - Sleep timeout in minutes.  How long until the device goes to sleep (range 1 to 999)
 
 Badge software can be loaded and upgraded separately from the name load.  There is no need to use the name loader again once values are set properly. 
 
@@ -33,7 +37,7 @@ Zip code and country code are not used. Eventually will be used for weather fore
 
 General info:
 Power is from the battery that sits under the top board. 
-To recharge, you have to pull the display/cpu from the board (it is just plugged in). This is a design flaw that will be resolved in the first real version.  Carefully pull it from the top but do not pull the battery plug out. Let it sit there.  Then plug into the power source (PC or generic wall charger)  The estimate voltage is shown at the bottom of the screen. The number shown is only an estimate and the voltage sample is only taken via some trickery when the system starts up. At full charge it should be 4-3.7 volts.  It works fine down in the 3 volt range. 
+To recharge, you have to pull the display/cpu from the board (it is just plugged in).    Plug into the power source (PC or generic wall charger).  The estimate voltage is shown at the bottom of the screen but is unreliable because the drop form 4.1 to <3.1 (lowest that wil run the processor) is so quick that it is hard to catch from the power pins. BUt an estimate is attempted. and it looks cool. The number shown is only an estimate and the voltage sample is only taken via some trickery when the system starts up. At full charge it should be 4.1-4.07 volts.  It works fine down in the 3.1 volt range. 
 
 Software:
 
@@ -79,6 +83,20 @@ The software pulsates the “throbbing” chevron in the lower right.   The powe
 
 At boot the device attempts to connect to the first SSID, if it fails it tries the second.  If it connects, then it gets the time and offsets using the TZ parameter.  If the WIFi fails to connect, it shows N/A where time would normally reside. It will retry every hour.  
 Time is displayed at the bottom. The wifi is then disconnected.  Time is maintained inside the device and is updated every minute. The Wifi is connected every hour to refresh and sync for clock float. 
+
+Sleep logic: 
+A timer is set that is a reflection of the timeout request in the Sleep timet parameter value. This paramter is in minutes. 
+So, for example, if the timer is set for 15 minutes, then after 15 minutes with no switch being changed, the device will "sleep".
+"Sleeping" is not sleeping the processor. The processor still needs to watch the switches. However, for practical purposes llittle power is used.  
+While sleeping no LEDS show and no Wifi is used. Most of the power is being reserved.
+
+Time logic:
+Time is gathered via WiFI from an NTP server. Offset is presented and the HH:MM should reflect current time for the locale represented by the offset value. (-5 USEST, -6 USCST, -7 USMST, -8 USPST, etc.) 
+Each minute the screen is refreshed with a new time. The refresh will be less obnoxious in a future release. Currently, the fulle screen is refreshed which causes it to blink.  
+There is also a delay when startup happens (before the switches and LEDs are started). I do lots of nasty slow stuff at startup. 
+After 30 minutes, the time is refreshed from the time server (via WiFI) So the net is that WiFi is only used every 30 minutes. 
+
+#SAO ports and SAO boards
 
 SAO ports are labeled "Dynabus: They are standard SAO V 1.68 ports. https://hackaday.com/2019/03/20/introducing-the-shitty-add-on-v1-69bis-standard/
 with 3V, GND, SCL/SDA, GPIO1 and GPIO2 available.    The software uses 3V/GND, GPIO1 and GPIO2.  
