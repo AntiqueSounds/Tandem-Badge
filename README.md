@@ -11,8 +11,12 @@ See:
 
 Current software version is V3E (shown on the badge in the lower right corner sideways).   The current badge versio is 12x for both top and bottom. The two boards must match versions.  
 The SAO boards have separate versioning and do not have to coincide (can be used on any other SAO enabled badge). 
+
+
+**The switches are FRAGILE, but functional.  Please gently switch them. This was the most difficult part of the whole project. The design and assembly of these switch extensions is still evolving.** 
+
 ## Functionality
-The software has been enhanced to allow serial connection via USB port (115200) to prompt for values to place into persitent memory of the ESP-32. The use of the name loader tool is not unnecessary anymore.
+The software has been enhanced to allow serial connection via USB port (115200) to prompt for values to place into persistent memory of the ESP-32. The use of the name loader tool is not unnecessary anymore.
 
 Serial port is set to 115200. The USB is for powerand for serial communication. (Configuration or debugging.) Serial Prompts are for the values shown below in the software persistent memory section. 
 
@@ -29,7 +33,7 @@ Zip code and country code are not yet used. Eventually will be used for weather 
 
 ### General info:
 Power is from the battery that sits under the top board. 
-To recharge, you plug the USB into the power source (PC or generic wall charger).  The estimated voltage is shown at the bottom of the screen but is unreliable because the drop form 4.1 to <3.1 (lowest that wil run the processor) is so quick that it is hard to catch from the power pins. But an estimate is attempted and it looks cool. The number shown is only an estimate and the voltage sample is only taken via some trickery when the system starts up. At full charge it should be 4.1-4.07 volts.  It works fine down in the 3.1 volt range. 
+To recharge, you plug the USB into the power source (PC or generic wall charger).  The estimated voltage is shown at the bottom of the screen but is unreliable because the drop form 4.1 to <3.1 (lowest that will run the processor) is so quick that it is hard to catch from the power pins. But an estimate is attempted and it looks cool. The number shown is only an estimate and the voltage sample is only taken via some trickery when the system starts up. At full charge it should be 4.1-4.07 volts.  It works fine down in the 3.1 volt range. 
 
 ### Software:
 
