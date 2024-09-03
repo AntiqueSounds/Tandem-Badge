@@ -13,6 +13,13 @@ Current software version is V3E (shown on the badge in the lower right corner si
 The SAO boards have separate versioning and do not have to coincide (can be used on any other SAO enabled badge). 
 
 
+![Hello my name is](./Pictures/IMG_5119.JPG)
+
+
+
+
+
+
 **The switches are FRAGILE, but functional.  Please gently switch them. This was the most difficult part of the whole project. The design and assembly of these switch extensions is still evolving.** 
 
 ## Functionality
