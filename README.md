@@ -40,7 +40,7 @@ Zip code and country code are not yet used. Eventually will be used for weather 
 
 ### General info:
 Power is from the battery that sits under the top board. 
-To recharge, you plug the USB into the power source (PC or generic wall charger).  The estimated voltage is shown at the bottom of the screen but is unreliable because the drop form 4.1 to <3.1 (lowest that will run the processor) is so quick that it is hard to catch from the power pins. But an estimate is attempted and it looks cool. The number shown is only an estimate and the voltage sample is only taken via some trickery when the system starts up. At full charge it should be 4.1-4.07 volts.  It works fine down in the 3.1 volt range. 
+To recharge, you plug the USB into the power source (PC or generic wall charger).  The estimated voltage is shown at the bottom of the screen but is unreliable because the drop from 4.1 to <3.2-ish (lowest that will run the processor) is so quick that it is hard to catch from the data pins. But an estimate is attempted and it looks cool. The number shown is only an estimate and the voltage sample is only taken via some trickery when the system starts up. At full charge it should be 4.1-4.07 volts.  It works fine down in the 3.1 volt range. 
 
 ### Software:
 
