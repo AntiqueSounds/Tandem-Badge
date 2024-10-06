@@ -9,7 +9,7 @@ See:
 
 *Note: I am working on instructions for building the device.This will be done in a while. I have to take photographs of each step and then document each step. This will take me a bit of time. Please be patient.*
 
-Current software version is V3E (shown on the badge in the lower right corner sideways).   The current badge versio is 12x for both top and bottom. The two boards must match versions.  
+Current software version is V3E (shown on the badge in the lower right corner sideways).   The current badge version is 13 for both top and bottom. The two boards must match versions.  
 The SAO boards have separate versioning and do not have to coincide (can be used on any other SAO enabled badge). 
 
 
