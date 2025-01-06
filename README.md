@@ -81,8 +81,8 @@ Switches are considered big-endian from the user perspective (low order is right
 
 The software pulsates the “throbbing” chevron in the lower right.   The power and run LEDs are also pulsed in the software (not related to the switches).
 
-At boot the device attempts to connect to the first SSID, if it fails it tries the second.  If it connects, then it gets the time and offsets using the TZ parameter.  If the WIFi fails to connect, it shows N/A where time would normally reside. It will retry every hour.  
-Time is displayed at the bottom. The wifi is then disconnected.  Time is maintained inside the device and is updated every minute. The Wifi is connected every hour to refresh and sync for clock float. 
+At boot time the device attempts to connect to the first SSID, if it fails it tries the second.  If it connects, then it gets the time and offsets using the TZ parameter.  If the WIFi fails to connect, it shows N/A where time would normally reside. It will retry every 30 minutes.  
+Time is displayed at the bottom. The wifi is then disconnected.  Time is maintained inside the device and is updated every minute. The Wifi is connected 30 minutes to refresh and sync for clock float. 
 ### Display layout:
 The display places the First name as the largest text. Text size adjusts as the length requires. Up to 5 characters show at the largest size.  Last name is placed below and is resized according to how long it is. The maximum viable last name length is about 14 characters (if I rememeber correctly?).  
 Lowest line shows an estimate of battery power. Do not rely entirely on this image or voltage shown. If it drops below 3.9, you should recharge the device.  
@@ -116,19 +116,20 @@ The Mackie SAO uses 3V for the CPU LEDs and GPIO2 (and GOPI1) for the other LEDS
 
 The device will drive those pins for any SAO placed onto the SAO header. Several have been tested to work. Even older designs will work as long as 3V and GND are next to each other. The circuit is protected against shorts.  
 ## Display
+### Normal Operative Display
+![Normal Display](./Pictures/Normal.JPG)
+If everything is running properly, this display gets refreshed each minute. But the time is not updated from the server. Wifi is NOT connected when the little "handheld" icon shows. That icon means that everything is updated and running.  This icon should show when things are working properly.   The battery icon is mostly useless, but it is accurate. By the time the battery bar shows weakening (i.e. < 3.5 volts), the device usually stops. 
+### Sleeping Display
+![Sleeping](./Pictures/Sleeping.JPG)
+The sleep icon is shown to the left side of the "handheld" or the "failed Wifi" icon only when the device is sleeping. Device "sleeps" by not updating the time, nor updating the led displays. Power LED on the SAO is still used. Wake by toggling any switch or resetting the device. 
 ### Right side horizontal tiny characters - Configuration info 
 ![Horizontals](./Pictures/Horizontal.JPG)
-The side tiny letters show, Version (e.g. V3e*), Sleep timer value in minutes (e.g. 30 minutes), SSID that is being used (if it is not connected, the last one it tried).  
+The sideways tiny letters on the right side of the display show, Version (e.g. V3e*), Sleep timer value in minutes (e.g. 30 minutes), and the SSID that is being used (if it is not connected, the last one that was tried).  
 ### Boot Display
 ![Booting](./Pictures/Updating-time.JPG)
-This display should just last a second of so. It is shown when the WiFi is connected and the time is being pulled from the NTP server. 
+This display should just last a second or so. It is briefly shown when the WiFi is connected and the time is being pulled from the NTP server. 
 ### Failed WiFi Display
 ![No Wifi](./Pictures/Not-connected.JPG)
 If the device fails to connect to either the primary or the secondary SSID, this is what is displayed. The device tries again every 30 minutes. 
-### Normal Operative Display
-![Normal Display](./Pictures/Normal.JPG)
-If everything is running properly, this display gets refreshed each minute. But the time is not updated from the server. Wifi is NOT connected when the little "handheld" icon shows. That icon means that everything is updated and running.  This icon should show when things are working properly. 
-### Sleeping Display
-![Sleeping](./Pictures/Sleeping.JPG)
-The sleep icon is shown to the left side of the "handheld" or the "failed Wifi" icon only when the device is slepping. Device "sleeps by not updating the time, nor updating the led displays. Power LED on the SAO is still used. Wake by toggling any switch or resetting the device.   I am considering whether to change this or not.  The device could be set up to truely speel and not use any significant power, but then it would reboot upon awake. And I would need to put in a wake-up wiring onto a new board design.  
+
 
