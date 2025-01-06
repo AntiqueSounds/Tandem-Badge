@@ -29,11 +29,11 @@ M. Keith Moore
 *      - Set GPIO led blinkies (reset, power, and throbber)
 *      - Check switches
 *      - Map switches to actions
-*      - Switches are reflected above their locaiotn in the LED or..
+*      - Switches are reflected above their location in the LED or..
 *      - Switches do special actions.  Documented elsewhere.
 *      - Check timers - Sleep (below) and minute update times. Every 30 minutes (default) the NTP time will be resynced with the internal clock.  
 *      - Sleep time is checked and reset each time a switch is changed. Wake is done by flipping any switch. 
-*        Sleep only stops the LEDs.  THe WiFi is not active except every time the time is synced to NTP every 30 minutes
+*        Sleep only stops the LEDs.  The WiFi is not active except every time the time is synced to NTP every 30 minutes
 *  
 *  
 *************************************************************************/
@@ -41,17 +41,15 @@ M. Keith Moore
 
 // Libraries are sensitive to order.   Take care moving things around. 
 
-#include <JSON_Decoder.h>
-#include <OpenWeather.h>
-
+//#include <JSON_Decoder.h>
+//#include <OpenWeather.h>
 //#include <JSON_Listener.h>
+#include <Timers.h>
 #include <WiFi.h>
 #include <WiFiUdp.h>
 #include <TimeLib.h>
 #include <NTPClient.h>
-#include <Timers.h>
 #include <jled.h>
-//#include <ESPHTTPClient.h>
 #include <time.h>
 #include <Adafruit_GFX.h>
 //#define ESP32
@@ -66,7 +64,7 @@ M. Keith Moore
 */
 //#define DEBUG TRUE // Comment this out for non-debug
 #define ENABLE_GxEPD2_GFX 0
-#define DISVERSION "V3E"
+#define DISVERSION "V3E*"
 #define XSTATUS 237  // beginning of the status @ this column
 #define YSTATUS 126  // beginning of the status at this row
 #define BOXWIDTH 200
@@ -83,6 +81,7 @@ M. Keith Moore
 #define SERIALTIMEOUT 1000
 #define BASELINELEDREFRESH 100
 #define REFRESHTIMERVAL 60000  // 1 minute (timer in ms) 
+#define UPDATE_INTERVAL 1800000; // how often to update time milliseconds  30 mins
 
 // Values here are little endian. Values on the panel are big endian. 
 //#define UNIVERSALNUMBER 0B0000000000100010 // normally this should be octal 42. switches set to this turns on the blinkies
@@ -117,54 +116,50 @@ M. Keith Moore
 
 //#include <SD.h>
 //#include <FS.h>
-//#include <WiFi.h>
 
 //#include GxEPD_BitmapExamples
 // FreeFonts from Adafruit_GFX
-// Fonts are located in the libraries/fonts directory under the Adafruit_GFX_Library folder in the fonts folder or in GxEPD2. 
-
-#include <Fonts.h>  // the files called Fonts contains the used list instead of keeping it here. 
+// Fonts are located in the libraries/fonts directory under the Adafruit_GFX_Library folder in the fonts folder or in GxEPD2 and in local ./Fonts directory. 
 
 /* These should reside in the GFX library shown here still to confirm the ones that are used and the ones not used. 
 * See the fonts.h file to see which ones are active and used
+*/
 
-#include <Fonts/data_latin6pt7b.h>
 #include <Fonts/data_latin8pt7b.h>
 #include <Fonts/data_latin10pt7b.h>
 #include <Fonts/data_latin12pt7b.h>
 #include <Fonts/data_latin18pt7b.h>
 #include <Fonts/data_latin20pt7b.h>
-#include <Fonts/data_latin22pt7b.h>
+//#include <Fonts/data_latin22pt7b.h>
 #include <Fonts/data_latin24pt7b.h>
-#include <Fonts/data_latin28pt7b.h>
+//#include <Fonts/data_latin28pt7b.h>
 #include <Fonts/data_latin30pt7b.h>
-#include <Fonts/data_latin32pt7b.h>
-#include <Fonts/data_latin36pt7b.h>
+//#include <Fonts/data_latin32pt7b.h>
+//#include <Fonts/data_latin36pt7b.h>
 #include <Fonts/data_latin42pt7b.h>
 //#include <Fonts/FreeMonoBold36pt7b.h>
 //#include <Fonts/FreeMonoBold42pt7b.h>
 //#include <Fonts/FreeMonoBold9pt7b.h>
 //#include <Fonts/FreeMonoBold12pt7b.h>
 //#include <Fonts/FreeMonoBold18pt7b.h>
-#include <Fonts/FreeMono24pt7b.h>
+//#include <Fonts/FreeMono24pt7b.h>
 #include <Fonts/FreeMono18pt7b.h>
 //#include <Fonts/FreeSansOblique24pt7b.h>
 //#include <Fonts/FreeSansBold24pt7b.h>
 #include <Fonts/TomThumb.h>
-#include <Fonts/meteocons7pt7b.h>
-#include <Fonts/meteocons10pt7b.h>
+//#include ./badgefonts/meteocons7pt7b.h
+//#include ./badgefonts/meteocons10pt7b.h
 #include <Fonts/meteocons12pt7b.h>
-#include <Fonts/meteocons14pt7b.h>
-#include <Fonts/meteocons16pt7b.h>
-#include <Fonts/WIFI4pt7b.h>
-#include <Fonts/WIFI6pt7b.h>
-#include <Fonts/WIFI8pt7b.h>
+//#include ./badgefonts/meteocons14pt7b.h
+//#include ./badgefonts/meteocons16pt7b.h
+//#include ./badgefonts/WIFI4pt7b.h
+//#include ./badgefonts/WIFI6pt7b.h
+//#include ./badgefonts/WIFI8pt7b.h
 #include <Fonts/WIFI10pt7b.h>
-#include <Fonts/WIFI12pt7b.h>
-// 'wifi_PNG62355', 20x14px
-// 'wifi_PNG62355', 20x14px
-*/
+//#include ./badgefonts/WIFI12pt7b.h
 
+// 'wifi_PNG62355', 20x14px
+// 'wifi_PNG62355', 20x14px
 
 const unsigned char epd_bitmap_wifi_PNG62355 [] PROGMEM = {
 	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
@@ -252,17 +247,18 @@ auto SAO1led = JLed(jled::Esp32Hal(SAO1Pin,0)).Blink(1000,1000).Forever();
 //auto boardled = JLed(LEDGPin).Breathe(1800).DelayAfter(150).MaxBrightness(20).Forever();
 // Setup timer(s)
 
+// We set up just two timers. 
 Timers refreshTimer;
 Timers sleepTimer;
-// Wifi Time (NTP setup)
+
 
 // set up weather
-OW_Weather ow; // Weather forecast library instance
+//OW_Weather ow; // Weather forecast library instance
 
 //const char* ntpServer = "pool.ntp.org";
 unsigned long lastUpdate = 0;
 unsigned long lastIntervalUpdate = 0;
-const long updateInterval = 18000000; // how often to update time seconds 30 mins
+const long updateInterval = UPDATE_INTERVAL; // how often to update time in seconds
 unsigned long lastNTPTime = 0;
 const char* ntpServer = "time.nist.gov";
 int  gmtOffset_hours = -4;
@@ -277,8 +273,8 @@ WiFiUDP udpClient;
 NTPClient timeClient(udpClient,ntpServer,gmtOffset_sec,daylightOffset_sec);
 
 // See https://docs.thingpulse.com/how-tos/openweathermap-key/
-String OPEN_WEATHER_MAP_APP_ID = "ec5f1053c471c0d461c4b2ab3e75745e"; // this is my personal used as a defauly
-String OPEN_WEATHER_MAP_LANGUAGE = "en";
+//String OPEN_WEATHER_MAP_APP_ID = "ec5f1053c471c0d461c4b2ab3e75745e"; // this is my personal used as a defauly
+//String OPEN_WEATHER_MAP_LANGUAGE = "en";
 //boolean IS_METRIC = true;// PLEASE GET YOUR OWN AND ENTER IT INTO THE PREFS memory using the configuration process. 
 /*
 Go to https://openweathermap.org/find?q= and search for a location. Go through the
@@ -286,7 +282,7 @@ result set and select the entry closest to the actual location you want to displ
 data for. It'll be a URL like https://openweathermap.org/city/2657896. The number
 at the end is what you assign to the constant below.
  */
-String OPEN_WEATHER_MAP_LOCATION_ID = "49633";
+//String OPEN_WEATHER_MAP_LOCATION_ID = "49633";
 /*
 Arabic - ar, Bulgarian - bg, Catalan - ca, Czech - cz, German - de, Greek - el,
 English - en, Persian (Farsi) - fa, Finnish - fi, French - fr, Galician - gl,
@@ -296,10 +292,6 @@ Portuguese - pt, Romanian - ro, Russian - ru, Swedish - se, Slovak - sk,
 Slovenian - sl, Spanish - es, Turkish - tr, Ukrainian - ua, Vietnamese - vi,
 Chinese Simplified - zh_cn, Chinese Traditional - zh_tw.
 */
-
-
-
-
 
 
 //  THese are obtaned from the persistant memory prefs
@@ -386,6 +378,7 @@ bool setupSDCard(void)
 void printForecast()
 {
   // Create the structures that hold the retrieved weather
+/* Not done yet
   OW_forecast  *forecast = new OW_forecast;
 
   Serial.print("\nRequesting weather information from OpenWeather... ");
@@ -439,9 +432,10 @@ void printForecast()
   }
   // Delete to free up space and prevent fragmentation as strings change in length
   delete forecast;
+*/
 }
 
-
+/*
 //Converts wind direction in degrees to cardinal direction
 String windDirection(int direction){
   direction %= 360;
@@ -463,6 +457,7 @@ String windDirection(int direction){
   return F("NNW");
 }
 
+*/
 
 String padWithZeroBelowTen(int d) {
   return d < 10 ? "0" + String(d) : String(d);
@@ -522,10 +517,6 @@ void setup(){
  // Setup the display
   updateStatic();
   updatePWM();
-
-
-
-  
   timeIsReal = getTime();
 // 74HC165 pins
   pinMode(load, OUTPUT);
@@ -592,13 +583,15 @@ bool getTime(){
     wifiStatus = YESWIFINOW;// show wifi connected 
     delay (250);
     // Initialize a NTPClient to get time
+
     timeClient.begin();
+    timeClient.setTimeOffset(3600*TZ);   
+//    Serial.printf("TZ=%i",TZ);
   // Set offset time in seconds to adjust for your timezone, for example:
   // GMT +1 = 3600
   // GMT +8 = 28800
   // GMT -1 = -3600
   // GMT 0 = 0
-    timeClient.setTimeOffset(3600*TZ);
     timeClient.update();
     partialScreenBuffer = timeClient.getFormattedTime().substring(0,5);
 #ifdef DEBUG
@@ -608,6 +601,7 @@ bool getTime(){
     WiFi.disconnect(true);
     WiFi.mode(WIFI_OFF);
     wifiStatus = NOWIFINOW; /// see if the icon changes
+    updateStatic();
     showPartialUpdate(partialScreenBuffer);
     return true;
   }
@@ -622,36 +616,35 @@ bool initWiFi() {
   int failcnt = 0; 
   WiFi.mode(WIFI_STA);
 #ifdef DEBUG
-    Serial.print("Connecting to WiFi:"); 
-    Serial.print(ssid); 
-    Serial.print(" ");
-    Serial.print("Connecting to scondary WiFi:"); 
-    Serial.print(ssid2); 
+//    Serial.print("Connecting to WiFi:"); 
+    Serial.printf("Connecting to WiFi using SSID:%s p/w %s or to %s p/w %s",ssid,password,ssid2,password2); 
 #endif
   while (WiFi.status() != WL_CONNECTED) {
+ 
     WiFi.begin(ssid, password);
-    Serial.print('.');
-    delay(250);
-    if (failcnt++ > 10){
-        while (WiFi.status() != WL_CONNECTED) {
-        WiFi.begin(ssid2, password2);
-        Serial.print(".");
-        delay (250);
-        if (failcnt++ > 10){   // try harder on #2
-//          break;
-          wifiStatus = FAILWIFI;
-          return false;
-        };
-        ssid = ssid2;   // set the primary to value of the backup for next time or for display. Reboot resets this. 
-      };
+#ifdef DEBUG
+    Serial.print('.');Serial.print(failcnt);
+    Serial.print(ssid);
+#endif
+    delay(2000);
+    if (failcnt++ == 5){  //  for first SSID
+        ssid = ssid2;   // set the primary to value of the backup for next time or for display. Reboot resets this.
+        password = password2;
+        Serial.print("Connecting to secondary WiFi:"); 
+        Serial.println(ssid); 
     };
-    
-  };
+    if (failcnt > 15){   // try harder on #2
+//          break;
+        wifiStatus = FAILWIFI;
+        return false;
+    }; 
+  }; 
+// If you get here, you have a connection
   Serial.println(WiFi.localIP());
   onlineReady = true; 
   wifiStatus = "b"; /// see if the icon changes
   return true;
-}
+} // end of WifiInit
 
 void drawBattery() {
  
@@ -764,6 +757,7 @@ void wakeUp(){
       SAO2led.Reset();
 
       updateStatic();
+
       partialScreenBuffer = "Awake!";
       showPartialUpdate(partialScreenBuffer);
       updatePWM();
@@ -860,7 +854,7 @@ void updateMem(){
   
     prefs.end(); // close for credentials
     Serial.printf("FN=%s LN=%s empno=%s SSID=%s PW=%s SSID2=%s PW2=%s\n",firstName,lastName,empNo,ssid,password,ssid2,password2);
-    Serial.printf("TZ=%i Zip code=%s,Country=%s,Open Weather Key=%s, Sleep timeout=%u",TZ,zipCode,countryCode,openWeatherKey, sleepTimeout);  // in minutes
+    Serial.printf("TZ=%i Zip code=%s,Country=%s,Open Weather Key=%s, Sleep timeout=%u",TZ,zipCode,countryCode,String(openWeatherKey), sleepTimeout);  // in minutes
   }
   else{
     Serial.println("Error storing the credentials memory storage.");
@@ -887,7 +881,7 @@ void getName(){
   readMem();
  do {
   Serial.printf("\nFN=%s LN=%s empno=%s SSID=%s PW=%s SSID2=%s PW2=%s\n",firstName,lastName,empNo,ssid,password,ssid2,password2);
-  Serial.printf("TZ=%i Zip Code=%s Country=%s Open Weather Key=%s, Sleep Timeout=%u\n",TZ,zipCode,countryCode,openWeatherKey,sleepTimeout);
+  Serial.printf("TZ=%i Zip Code=%s Country=%s Open Weather Key=%s, Sleep Timeout=%u\n",TZ,zipCode,countryCode,String(openWeatherKey),sleepTimeout);
   Serial.println("\nDo you want this placed into memory?");
   if (valid()){
     updateMem();
@@ -957,6 +951,7 @@ void getName(){
     }
     else{
       TZ=input.toInt();
+  
     }
     Serial.println(TZ);
     delay (250);
@@ -1036,7 +1031,7 @@ void readMem(){
     password = prefs.getString("wifiPassword");
     ssid2 = prefs.getString("SSID2");
     password2 = prefs.getString("wifiPassword2");
-    gmtOffset_hours = prefs.getInt("TZ");
+    TZ = gmtOffset_hours = prefs.getInt("TZ");
     zipCode = prefs.getString("zipCode");
     countryCode = prefs.getString("countryCode");
     openWeatherKey = prefs.getString("openWeatherKey");
