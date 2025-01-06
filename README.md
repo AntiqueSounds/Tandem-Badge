@@ -114,5 +114,21 @@ with 3V, GND, SCL/SDA, GPIO1 and GPIO2 available.    The software uses 3V/GND, G
 The Chevron SAO uses 3V for fixed LEDs and GPIO2 for the candle blinking sequence for the other LEDs. 
 The Mackie SAO uses 3V for the CPU LEDs and GPIO2 (and GOPI1) for the other LEDS using a candle display. 
 
-The device will drive those pins for any SAO place onto the SAO header. Several have been tested to work. Even older designs will work as long as 3V and GND are next to each other. The circuit is protected against shorts.  
+The device will drive those pins for any SAO placed onto the SAO header. Several have been tested to work. Even older designs will work as long as 3V and GND are next to each other. The circuit is protected against shorts.  
+## Display
+### Right side horizontal tiny characters - Configuration info 
+![Horizontals](./Pictures/Horizontal.JPG)
+The side tiny letters show, Version (e.g. V3e*), Sleep timer value in minutes (e.g. 30 minutes), SSID that is being used (if it is not connected, the last one it tried).  
+### Boot Display
+![Booting](./Pictures/Updating-time.JPG)
+This display should just last a second of so. It is shown when the WiFi is connected and the time is being pulled from the NTP server. 
+### Failed WiFi Display
+![No Wifi](./Pictures/Not-connected.JPG)
+If the device fails to connect to either the primary or the secondary SSID, this is what is displayed. The device tries again every 30 minutes. 
+### Normal Operative Display
+![Normal Display](./Pictures/Normal.JPG)
+If everything is running properly, this display gets refreshed each minute. But the time is not updated from the server. Wifi is NOT connected when the little "handheld" icon shows. That icon means that everything is updated and running.  This icon should show when things are working properly. 
+### Sleeping Display
+![Sleeping](./Pictures/Sleeping.JPG)
+The sleep icon is shown to the left side of the "handheld" or the "failed Wifi" icon only when the device is slepping. Device "sleeps by not updating the time, nor updating the led displays. Power LED on the SAO is still used. Wake by toggling any switch or resetting the device.   I am considering whether to change this or not.  The device could be set up to truely speel and not use any significant power, but then it would reboot upon awake. And I would need to put in a wake-up wiring onto a new board design.  
 
