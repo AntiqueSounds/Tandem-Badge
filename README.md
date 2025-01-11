@@ -20,7 +20,7 @@ The SAO boards have separate versioning and do not have to coincide (can be used
 
 
 
-**The switches are FRAGILE, but functional.  Please gently switch them. This was the most difficult part of the whole project. The design and assembly of these switch extensions is still evolving.** 
+**The switches are FRAGILE, but functional.  Please gently switch them. This was the most difficult part of the whole project. The design and assembly of these switch extensions is still evolving. If a switch extension falls off, it can be "crazy glued" back on.** 
 
 ## Functionality
 The software has been enhanced to allow serial connection via USB port (115200) to prompt for values to place into persistent memory of the ESP-32. The use of the name loader tool is not unnecessary anymore.
@@ -75,28 +75,29 @@ Normal switch on/off directs up to the led above it. On turns on the LED, off tu
 All switches on forces the device to prompt for memory values as listed above. Name, SSID, etc. 
 Switches are considered big-endian from the user perspective (low order is rightmost (#16))
 
-0000000000100010 = High-order switches +10 +14 – Octal 42, a random animated display. There are 7 different possible random displays.  
+0000000000100010 = High-order switches +10 +14 – Octal 42, a random animated display. There are 7 different possible random displays.  Set/reset the switch to change the rotate display sequence.  
 0100000000000000 = Set to little endian "2" = octal “4000"    does a “cylon”  display  
 1100000000000000 = Set to little endian “3” = octal "140000"  does a “boot startup display”
+1000000000000001 = Forces into sleep mode
 
 The software pulsates the “throbbing” chevron in the lower right.   The power and run LEDs are also pulsed in the software (not related to the switches).
 
 At boot time the device attempts to connect to the first SSID, if it fails it tries the second.  If it connects, then it gets the time and offsets using the TZ parameter.  If the WIFi fails to connect, it shows N/A where time would normally reside. It will retry every 30 minutes.  
 Time is displayed at the bottom. The wifi is then disconnected.  Time is maintained inside the device and is updated every minute. The Wifi is connected 30 minutes to refresh and sync for clock float. 
 ### Display layout:
-The display places the First name as the largest text. Text size adjusts as the length requires. Up to 5 characters show at the largest size.  Last name is placed below and is resized according to how long it is. The maximum viable last name length is about 14 characters (if I rememeber correctly?).  
+The display places the First name as the largest text. Text size adjusts as the length requires. Up to 5 characters show at the largest size.  Last name is placed below and is resized according to how long it is. The maximum viable last name length is about 14 characters (if I rememeber correctly?). Anything longer will be truncated without error.
 Lowest line shows an estimate of battery power. Do not rely entirely on this image or voltage shown. If it drops below 3.9, you should recharge the device.  
-The employee number value is display to the right of the battery.   
-The time is shown if available. If not, it should show "N/A".  The device requires access to WiFi in order to obtain the time.  
-To the right of the time is icon(s) that show state.  If in flux getting the time, it will change a few times.  Once the device is settled and resting, the icon should be a little handheld device image.  When sleeping, it shoulds show a little crecent moon. 
+The employee number value is display to the right of the battery.  I believe this is up to 8 characters. I forget.  It will also politely be truncated if it is too long.  
+The time is shown if available. If not, it shows "N/A".  The device requires access to WiFi in order to obtain the time. But it is perfectly normal to show N/A if there is no WiFi connected.  
+To the right of the time is icon(s) that show state of the device.  While in-flux getting the time, it will change a few times.  Once the device is settled and resting, the icon should be a little hand-held device image.  When sleeping, it shoulds show a little crecent moon. 
 To the right of the icons is tiny static informational text:  Version id, a number showing the current sleep time setting, and the name of the prefered SSID to connect to.  
-The screen refreshes every minute (time display updates each minute). 
+The screen refreshes every minute. 
 
 ### Sleep logic: 
-A timer is set that is a reflection of the timeout request in the Sleep time parameter value. This parameter is represented in minutes. 
+A timer is set that is a reflection of the timeout request in the sleep time parameter value. This parameter is represented in minutes. 
 For example, if the timer is set for 15 minutes, then after 15 minutes with no switch being changed, the device will "sleep".
 "Sleeping" is not sleeping the processor. The processor still needs to watch the switches. However, for practical purposes little power is used.  
-While sleeping no LEDS show and no Wifi is used. Most of the power is being reserved.
+While sleeping no LEDS show and no Wifi is used. The SAO port is poewered. So if you want max savings, remove the SAO board to save power going to the solid LEDs on the SAO. Most of the power is being reserved since there are no LEDs on.
 
 ### Time logic:
 Time is gathered via WiFI from an NTP server. Offset is presented and the HH:MM should reflect current time for the locale represented by the offset value. (-5 USEST, -6 USCST, -7 USMST, -8 USPST, etc.) 
@@ -111,14 +112,14 @@ Software does a candle display on the SAO0 and SAO1 ports GPIO25 and GPIO26 resp
 SAO ports are labeled "Dynabus: They are standard SAO V 1.68 ports. https://hackaday.com/2019/03/20/introducing-the-shitty-add-on-v1-69bis-standard/
 with 3V, GND, SCL/SDA, GPIO1 and GPIO2 available.    The software uses 3V/GND, GPIO1 and GPIO2.  
 
-The Chevron SAO uses 3V for fixed LEDs and GPIO2 for the candle blinking sequence for the other LEDs. 
+The chevron SAO uses 3V for fixed LEDs and GPIO2 for the candle blinking sequence for the other LEDs. 
 The Mackie SAO uses 3V for the CPU LEDs and GPIO2 (and GOPI1) for the other LEDS using a candle display. 
 
 The device will drive those pins for any SAO placed onto the SAO header. Several have been tested to work. Even older designs will work as long as 3V and GND are next to each other. The circuit is protected against shorts.  
 ## Display
 ### Normal Operative Display
 ![Normal Display](./Pictures/Normal.JPG)
-If everything is running properly, this display gets refreshed each minute. But the time is not updated from the server. Wifi is NOT connected when the little "handheld" icon shows. That icon means that everything is updated and running.  This icon should show when things are working properly.   The battery icon is mostly useless, but it is accurate. By the time the battery bar shows weakening (i.e. < 3.5 volts), the device usually stops. 
+If everything is running properly, this display gets refreshed each minute. But the time is not updated from the server that frequently. Wifi is NOT connected when the little "handheld" icon shows. That icon means that everything is updated and running (but Wifi not connected).  This icon should show when everything is working properly.   The battery icon is mostly useless, but it is accurate. By the time the battery bar shows weakening (i.e. < 3.5 volts), the device usually stops. 
 ### Sleeping Display
 ![Sleeping](./Pictures/Sleeping.JPG)
 The sleep icon is shown to the left side of the "handheld" or the "failed Wifi" icon only when the device is sleeping. Device "sleeps" by not updating the time, nor updating the led displays. Power LED on the SAO is still used. Wake by toggling any switch or resetting the device. 
