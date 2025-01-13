@@ -1,7 +1,5 @@
-
 # Tandem-Badge
-## Tandem 50th Anniversary badge project ✨
-![Github](./Pictures/QR-Github.PNG)
+## Tandem 50th Anniversary badge project ✨ &nbsp; &nbsp; &nbsp;   <img src="./Pictures/QR-Github.PNG" width=10% height=10%> &nbsp; &nbsp; &nbsp; &nbsp;  <img src="./Pictures/QR-Tindie.PNG" width=10% height=10%>
 This project is a special anniversary badge that can be used for trade shows like the ones used at DefCon.  The standard for SAO badge boards is fully supported in the hardware and software
 See:   
 [DefCon badges](https://defcon.org/html/links/dc-badge.html)  
@@ -133,6 +131,7 @@ This display should just last a second or so. It is briefly shown when the WiFi 
 ![No Wifi](./Pictures/Not-connected.JPG)
 If the device fails to connect to either the primary or the secondary SSID, this is what is displayed. The device tries again every 30 minutes. 
 ### Project kit parts and boards
-![Kit](./Pictures/QR-Tindie.PNG)
-For access to all of the parts and boards, go to the kit site: https://www.tindie.com/products/nixiekeith/tandem-anniversary-badge/
-Github: https://github.com/AntiqueSounds/Tandem-Badge
+For access to all of the parts and boards, go to the kit site: https://www.tindie.com/products/nixiekeith/tandem-anniversary-badge/ <br/>
+Github: https://github.com/AntiqueSounds/Tandem-Badge <br/>
+Tindie for the kits: [https://www.tindie.com/stores/nixiekeith/](https://www.tindie.com/products/nixiekeith/tandem-anniversary-badge/) <br/> <br/>
+<img src="./Pictures/QR-Github.PNG" width=10% height=10%> &nbsp; &nbsp; &nbsp; &nbsp;  <img src="./Pictures/QR-Tindie.PNG" width=10% height=10%>
