@@ -133,6 +133,6 @@ This display should just last a second or so. It is briefly shown when the WiFi 
 ![No Wifi](./Pictures/Not-connected.JPG)
 If the device fails to connect to either the primary or the secondary SSID, this is what is displayed. The device tries again every 30 minutes. 
 ### Project kit parts and boards
-![Kit](./Pictures/QR-Tindie.PNG)
+<img src="./Pictures/QR-Tindie.PNG" width=10% height=10%>
 For access to all of the parts and boards, go to the kit site: https://www.tindie.com/products/nixiekeith/tandem-anniversary-badge/
 Github: https://github.com/AntiqueSounds/Tandem-Badge
