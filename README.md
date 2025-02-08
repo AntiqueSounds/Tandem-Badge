@@ -92,11 +92,12 @@ To the right of the time is icon(s) that show state of the device.  While in-flu
 To the right of the icons is tiny static informational text:  Version id, a number showing the current sleep time setting, and the name of the prefered SSID to connect to.  
 The screen refreshes every minute. 
 
-### Sleep logic: 
+### "Sleep" logic: 
 A timer is set that is a reflection of the timeout request in the sleep time parameter value. This parameter is represented in minutes. 
 For example, if the timer is set for 15 minutes, then after 15 minutes with no switch being changed, the device will "sleep".
-"Sleeping" is not sleeping the processor. The processor still needs to watch the switches. However, for practical purposes little power is used.  
-While sleeping no LEDS show and no Wifi is used. The SAO port is poewered. So if you want max savings, remove the SAO board to save power going to the solid LEDs on the SAO. Most of the power is being reserved since there are no LEDs on.
+"Sleeping" does not place the processor into sleep mode. The processor still needs to watch the switches. However, for practical purposes little power is used.  
+While sleeping, no LEDS show and no Wifi is used. The SAO port is poewered. So if you want max savings, remove the SAO board to save power going to the solid LEDs on the SAO. Most of the power is being reserved since there are no LEDs on.
+I could add the tiny bit of re-work to the board to support wake from processoron a switch toggle, and a real sleep mode, but... Nah. 
 
 ### Time logic:
 Time is gathered via WiFI from an NTP server. Offset is presented and the HH:MM should reflect current time for the locale represented by the offset value. (-5 USEST, -6 USCST, -7 USMST, -8 USPST, etc.) 
